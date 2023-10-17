@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from constants import frequency_choose, mailing_status, log_status, NULLABLE
 
 
@@ -18,7 +19,7 @@ class Mailing(models.Model):
 class Message(models.Model):
     description = models.TextField(verbose_name='описание')
     title = models.CharField(max_length=150, verbose_name='заголовок')
-    mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, verbose_name='рассылка')
+    mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, related_name='messages', verbose_name='рассылка')
 
     def __str__(self):
         return self.title
@@ -29,10 +30,10 @@ class Message(models.Model):
 
 
 class Log(models.Model):
-    server_response = models.CharField
     status = models.CharField(max_length=15, choices=log_status, verbose_name='статус')
+    server_response = models.BooleanField(default=False, verbose_name='ответ от сервера')
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name='дата и время последней попытки')
-    mailing = models.ForeignKey(Mailing, on_delete=models.SET_NULL, **NULLABLE, default='-', verbose_name='рассылка')
+    mailing = models.ForeignKey(Mailing, on_delete=models.SET_NULL, **NULLABLE, related_name='logs', verbose_name='рассылка')
 
     def __str__(self):
         return f'{self.mailing} - {self.status} ({self.timestamp})'
@@ -48,6 +49,8 @@ class Post(models.Model):
     title = models.CharField(max_length=150, verbose_name='заголовок')
     image = models.ImageField(upload_to='posts/', **NULLABLE, verbose_name='изображение')
     publish_date = models.DateTimeField(auto_now_add=True, verbose_name='дата публикации')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE,
+                             verbose_name='пользователь')
 
     def __str__(self):
         return self.title
