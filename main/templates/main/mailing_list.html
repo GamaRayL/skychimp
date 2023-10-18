@@ -1,5 +1,6 @@
 {% extends 'main/base.html' %}
 {% block content %}
+    <h1>{{ title }}</h1>
     <div class="d-flex flex-column">
         <table class="table table-hover">
             <thead class="table-active">
@@ -18,12 +19,7 @@
                     <td>{{ object.send_time }}</td>
                     <td>{{ object.get_frequency_display }}</td>
                     <td>{{ object.message }}</td>
-                    <td class="
-                                {% if object.status == 'created' %}bg-primary-subtle
-                                {% elif object.status == 'started' %}bg-warning-subtle
-                                {% elif object.status == 'closed' %}bg-success-subtle
-                                {% endif %}
-                            ">
+                    <td class="{% include 'includes/status_statement.html' %}">
                         {{ object.get_status_display }}
                     </td>
                 </tr>

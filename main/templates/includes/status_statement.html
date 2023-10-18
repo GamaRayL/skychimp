@@ -1,0 +1,7 @@
+{% if object.status == 'created' %}
+    bg-primary-subtle
+{% elif object.status == 'started' %}
+    bg-warning-subtle
+{% elif object.status == 'closed' %}
+    bg-success-subtle
+{% endif %}

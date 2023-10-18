@@ -1,28 +1,58 @@
 {% extends 'main/base.html' %}
 {% block content %}
-    <div class="card">
-        <div class="card-header py-3
-                    {% if object.status == 'created' %}bg-primary-subtle
-                    {% elif object.status == 'started' %}bg-warning-subtle
-                    {% elif object.status == 'closed' %}bg-success-subtle
-                    {% endif %}
-        ">
-            <h1 class="my-0 fw-normal">Текущая рассылка</h1>
+    <div class="card w-50">
+        <div class="card-header py-3 {% include 'includes/status_statement.html' %}">
+            <h1 class="my-0 fw-normal display-6">Текущая рассылка</h1>
         </div>
         <div class="card-body text-bg-light rounded-3">
-            <p class="">{{ object.send_time }}</p>
-            <p class="">{{ object.get_frequency_display }}</p>
-            <p class="">{{ object.get_status_display }}</p>
-            <div>
-                <p>{{ object.message.title }}</p>
-                <p>{{ object.message.description }}</p>
+            <div class="mb-4">
+                <ul class="list-group">
+                    <li class="d-flex justify-content-between lh-sm p-2">
+                        <div class="w-100 border-bottom pb-2">
+                            <h5 class="my-0">Время</h5>
+                        </div>
+                        <span class="text-body-emphasis text-nowrap font-monospace">
+                            {{ object.send_time }}
+                        </span>
+                    </li>
+
+                    <li class="d-flex justify-content-between lh-sm p-2">
+                        <div class="w-100 border-bottom pb-2">
+                            <h5 class="my-0">Периодичность</h5>
+                        </div>
+                        <span class="text-body-emphasis text-nowrap font-monospace">
+                            {{ object.get_frequency_display }}
+                        </span>
+                    </li>
+
+                     <li class="d-flex justify-content-between lh-sm p-2">
+                        <div class="w-100 border-bottom pb-2">
+                            <h5 class="my-0">Статус</h5>
+                        </div>
+                        <span class="text-body-emphasis text-nowrap font-monospace">
+                            {{ object.get_status_display }}
+                        </span>
+                    </li>
+                </ul>
             </div>
-            <div class="">
-                <h5>Список пользователей</h5>
-                <ul>
-                    {% for user in users_list %}
-                        <li>{{ user }}</li>
-                    {% endfor %}
+
+            <div class="card mb-5">
+                <div class="card-header">{{ object.message.title }}</div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0 blockquote-footer">
+                        <p>{{ object.message.description }}</p>
+                    </blockquote>
+                </div>
+            </div>
+
+            <div class="text-end">
+                <h5>Пользователи получающие рассылку</h5>
+                <ul class="list-group list-unstyled">
+                    <li>
+                        {% for user in users_list %}
+                            <span><em>{{ user }}</em></span>
+                        {% endfor %}
+                    </li>
                 </ul>
             </div>
         </div>

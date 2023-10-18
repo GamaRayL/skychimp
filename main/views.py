@@ -1,5 +1,4 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DetailView, DeleteView
+from django.views.generic import TemplateView, CreateView, DetailView, DeleteView, UpdateView, ListView
 from django.urls import reverse_lazy
 from main.forms import MailingForm
 from main.models import Mailing
@@ -7,6 +6,9 @@ from main.models import Mailing
 
 class IndexView(TemplateView):
     template_name = 'main/home.html'
+    extra_context = {
+        'title': 'Главная страница'
+    }
 
 
 class MailingListView(ListView):
@@ -35,6 +37,7 @@ class MailingDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         users_list = self.object.user.values_list('email', flat=True)
+        context_data['title'] = 'Текущая рассылка'
         context_data['users_list'] = users_list
         return context_data
 
