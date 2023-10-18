@@ -1,0 +1,37 @@
+{% extends 'main/base.html' %}
+{% block content %}
+    <div class="d-flex flex-column">
+        <table class="table table-hover">
+            <thead class="table-active">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Время рассылки</th>
+                <th scope="col">Периодичность</th>
+                <th scope="col">Сообщение</th>
+                <th scope="col">Статус</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                <tr onclick="window.location='{% url 'main:mailing' object.pk %}';">
+                    <th scope="row">{{ object.pk }}</th>
+                    <td>{{ object.send_time }}</td>
+                    <td>{{ object.get_frequency_display }}</td>
+                    <td>{{ object.message }}</td>
+                    <td class="
+                                {% if object.status == 'created' %}bg-primary-subtle
+                                {% elif object.status == 'started' %}bg-warning-subtle
+                                {% elif object.status == 'closed' %}bg-success-subtle
+                                {% endif %}
+                            ">
+                        {{ object.get_status_display }}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a class="align-self-end btn btn-primary" href="{% url 'main:mailing_create' %}" role="button">
+            Добавить
+        </a>
+    </div>
+{% endblock %}

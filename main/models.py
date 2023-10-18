@@ -1,25 +1,12 @@
 from django.db import models
 from django.conf import settings
 from constants import frequency_choose, mailing_status, log_status, NULLABLE
-
-
-class Mailing(models.Model):
-    send_time = models.DateTimeField(verbose_name='время рассылки')
-    status = models.CharField(max_length=20, choices=mailing_status, verbose_name='статус')
-    frequency = models.CharField(max_length=10, choices=frequency_choose, verbose_name='периодичность')
-
-    def __str__(self):
-        return f'{self.get_frequency_display()} рассылка в {self.send_time}'
-
-    class Meta:
-        verbose_name = 'рассылка'
-        verbose_name_plural = 'рассылки'
+from users.models import User
 
 
 class Message(models.Model):
-    description = models.TextField(verbose_name='описание')
     title = models.CharField(max_length=150, verbose_name='заголовок')
-    mailing = models.ForeignKey(Mailing, on_delete=models.CASCADE, related_name='messages', verbose_name='рассылка')
+    description = models.TextField(verbose_name='описание')
 
     def __str__(self):
         return self.title
@@ -29,11 +16,27 @@ class Message(models.Model):
         verbose_name_plural = 'сообщения'
 
 
+class Mailing(models.Model):
+    send_time = models.DateTimeField(verbose_name='время рассылки')
+    frequency = models.CharField(max_length=10, choices=frequency_choose, verbose_name='периодичность')
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='сообщение')
+    user = models.ManyToManyField(User, related_name='users', verbose_name='клиенты')
+    status = models.CharField(max_length=20, choices=mailing_status, verbose_name='статус')
+
+    def __str__(self):
+        return f'{self.get_frequency_display()} рассылка в {self.send_time}'
+
+    class Meta:
+        verbose_name = 'рассылка'
+        verbose_name_plural = 'рассылки'
+
+
 class Log(models.Model):
     status = models.CharField(max_length=15, choices=log_status, verbose_name='статус')
     server_response = models.BooleanField(default=False, verbose_name='ответ от сервера')
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name='дата и время последней попытки')
-    mailing = models.ForeignKey(Mailing, on_delete=models.SET_NULL, **NULLABLE, related_name='logs', verbose_name='рассылка')
+    mailing = models.ForeignKey(Mailing, on_delete=models.SET_NULL, **NULLABLE, related_name='logs',
+                                verbose_name='рассылка')
 
     def __str__(self):
         return f'{self.mailing} - {self.status} ({self.timestamp})'
@@ -44,10 +47,10 @@ class Log(models.Model):
 
 
 class Post(models.Model):
-    description = models.TextField(verbose_name='содержимое')
-    views = models.IntegerField(default=0, verbose_name='просмотры')
     title = models.CharField(max_length=150, verbose_name='заголовок')
+    description = models.TextField(verbose_name='содержимое')
     image = models.ImageField(upload_to='posts/', **NULLABLE, verbose_name='изображение')
+    views = models.IntegerField(default=0, verbose_name='просмотры')
     publish_date = models.DateTimeField(auto_now_add=True, verbose_name='дата публикации')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE,
                              verbose_name='пользователь')

@@ -1,0 +1,23 @@
+{% extends 'main/base.html' %}
+{% block content %}
+    <table class="table">
+        <thead class="table-warning">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ф. И. О</th>
+            <th scope="col">Почта</th>
+            <th scope="col">Комментарий</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for client in client_list %}
+            <tr>
+                <th scope="row">{{ client.pk }}</th>
+                <td>{{ client.last_name }} {{ client.first_name }} {{ client.middle_name }}</td>
+                <td>{{ client.email }}</td>
+                <td>{{ client.comment }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

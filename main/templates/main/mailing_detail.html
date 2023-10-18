@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+{% block content %}
+    <div class="card">
+        <div class="card-header py-3
+                    {% if object.status == 'created' %}bg-primary-subtle
+                    {% elif object.status == 'started' %}bg-warning-subtle
+                    {% elif object.status == 'closed' %}bg-success-subtle
+                    {% endif %}
+        ">
+            <h1 class="my-0 fw-normal">Текущая рассылка</h1>
+        </div>
+        <div class="card-body text-bg-light rounded-3">
+            <p class="">{{ object.send_time }}</p>
+            <p class="">{{ object.get_frequency_display }}</p>
+            <p class="">{{ object.get_status_display }}</p>
+            <div>
+                <p>{{ object.message.title }}</p>
+                <p>{{ object.message.description }}</p>
+            </div>
+            <div class="">
+                <h5>Список пользователей</h5>
+                <ul>
+                    {% for user in users_list %}
+                        <li>{{ user }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
