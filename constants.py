@@ -1,18 +1,18 @@
 NULLABLE = {'blank': True, 'null': True}
 
-frequency_choose = (
+FREQUENCY_CHOOSE = (
         ('daily', 'Раз в день'),
         ('weekly', 'Раз в неделю'),
         ('monthly', 'Раз в месяц')
 )
 
-mailing_status = (
+MAILING_STATUS = (
         ('created', 'Создана'),
         ('started', 'Запущена'),
         ('closed', 'Завершена')
 )
 
-log_status = (
+LOG_STATUS = (
         ('success', 'Успешно'),
         ('failure', 'Неуспешно'),
 )

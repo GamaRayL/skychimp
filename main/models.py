@@ -1,7 +1,7 @@
 from django.db import models
-from django.conf import settings
-from constants import frequency_choose, mailing_status, log_status, NULLABLE
 from users.models import User
+from django.conf import settings
+from constants import NULLABLE, FREQUENCY_CHOOSE, MAILING_STATUS, LOG_STATUS
 
 
 class Message(models.Model):
@@ -18,10 +18,10 @@ class Message(models.Model):
 
 class Mailing(models.Model):
     send_time = models.DateTimeField(verbose_name='время рассылки')
-    frequency = models.CharField(max_length=10, choices=frequency_choose, verbose_name='периодичность')
+    frequency = models.CharField(max_length=10, choices=FREQUENCY_CHOOSE, verbose_name='периодичность')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='сообщение')
     user = models.ManyToManyField(User, related_name='users', verbose_name='клиенты')
-    status = models.CharField(max_length=20, choices=mailing_status, verbose_name='статус')
+    status = models.CharField(max_length=20, default='created', choices=MAILING_STATUS, verbose_name='статус')
 
     def __str__(self):
         return f'{self.get_frequency_display()} рассылка в {self.send_time}'
@@ -32,7 +32,7 @@ class Mailing(models.Model):
 
 
 class Log(models.Model):
-    status = models.CharField(max_length=15, choices=log_status, verbose_name='статус')
+    status = models.CharField(max_length=15, choices=LOG_STATUS, verbose_name='статус')
     server_response = models.BooleanField(default=False, verbose_name='ответ от сервера')
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name='дата и время последней попытки')
     mailing = models.ForeignKey(Mailing, on_delete=models.SET_NULL, **NULLABLE, related_name='logs',
