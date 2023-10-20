@@ -1,7 +1,8 @@
 from django.views.generic import TemplateView, CreateView, DetailView, DeleteView, UpdateView, ListView
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from main.forms import MailingForm
 from main.models import Mailing
+from main.services import send_mailing
 
 
 class IndexView(TemplateView):
@@ -29,6 +30,10 @@ class MailingCreateView(CreateView):
 
 class MailingUpdateView(UpdateView):
     model = Mailing
+    form_class = MailingForm
+
+    def get_success_url(self):
+        return reverse('main:mailing', args=[self.object.pk])
 
 
 class MailingDetailView(DetailView):
@@ -39,8 +44,10 @@ class MailingDetailView(DetailView):
         users_list = self.object.user.values_list('email', flat=True)
         context_data['title'] = 'Текущая рассылка'
         context_data['users_list'] = users_list
+        print(send_mailing())
         return context_data
 
 
 class MailingDeleteView(DeleteView):
     model = Mailing
+    success_url = reverse_lazy('main:mailings')

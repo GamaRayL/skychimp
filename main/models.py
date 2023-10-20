@@ -17,10 +17,10 @@ class Message(models.Model):
 
 
 class Mailing(models.Model):
+    user = models.ManyToManyField(User, verbose_name='клиенты')
     send_time = models.DateTimeField(verbose_name='время рассылки')
     frequency = models.CharField(max_length=10, choices=FREQUENCY_CHOOSE, verbose_name='периодичность')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='сообщение')
-    user = models.ManyToManyField(User, related_name='users', verbose_name='клиенты')
     status = models.CharField(max_length=20, default='created', choices=MAILING_STATUS, verbose_name='статус')
 
     def __str__(self):

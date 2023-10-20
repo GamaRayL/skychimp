@@ -1,5 +1,8 @@
 django
 psycopg2-binary
+apscheduler
+django-apscheduler
 python-dotenv
 pillow
 ipython
+

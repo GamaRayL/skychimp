@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+
+{% block content %}
+    <form method="post" class="row">
+        <div class="card">
+            <div class="card_header">
+                Удаление рассылки
+            </div>
+            <div class="card_body">
+                {% csrf_token %}
+                <p>Действительно удалить текущую рассылку?</p>
+                <button class="btn btn-danger" type="submit">Удалить</button>
+                <a href="{% url 'main:mailing' object.pk %}" class="btn btn-warning">Отмена</a>
+            </div>
+        </div>
+    </form>
+{% endblock %}
