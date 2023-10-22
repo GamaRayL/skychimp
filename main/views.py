@@ -44,7 +44,7 @@ class MailingDetailView(DetailView):
         users_list = self.object.user.values_list('email', flat=True)
         context_data['title'] = 'Текущая рассылка'
         context_data['users_list'] = users_list
-        print(send_mailing())
+
         return context_data
 
 

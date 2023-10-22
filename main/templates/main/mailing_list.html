@@ -16,7 +16,7 @@
             {% for object in object_list %}
                 <tr onclick="window.location='{% url 'main:mailing' object.pk %}';">
                     <th scope="row">{{ object.pk }}</th>
-                    <td>{{ object.send_time }}</td>
+                    <td>{{ object.time }}</td>
                     <td>{{ object.get_frequency_display }}</td>
                     <td>{{ object.message }}</td>
                     <td class="{% include 'includes/status_statement.html' %}">

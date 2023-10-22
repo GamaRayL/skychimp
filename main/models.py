@@ -17,14 +17,15 @@ class Message(models.Model):
 
 
 class Mailing(models.Model):
-    user = models.ManyToManyField(User, verbose_name='клиенты')
-    send_time = models.DateTimeField(verbose_name='время рассылки')
-    frequency = models.CharField(max_length=10, choices=FREQUENCY_CHOOSE, verbose_name='периодичность')
-    message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='сообщение')
     status = models.CharField(max_length=20, default='created', choices=MAILING_STATUS, verbose_name='статус')
+    frequency = models.CharField(max_length=10, choices=FREQUENCY_CHOOSE, verbose_name='периодичность')
+    time = models.TimeField(verbose_name='время рассылки')
+    date_run = models.DateField(**NULLABLE, verbose_name='дата начала рассылки')
+    user = models.ManyToManyField(User, verbose_name='клиенты')
+    message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='сообщение')
 
     def __str__(self):
-        return f'{self.get_frequency_display()} рассылка в {self.send_time}'
+        return f'{self.get_frequency_display()} не позже {self.date_run} / {self.time}'
 
     class Meta:
         verbose_name = 'рассылка'
@@ -33,7 +34,7 @@ class Mailing(models.Model):
 
 class Log(models.Model):
     status = models.CharField(max_length=15, choices=LOG_STATUS, verbose_name='статус')
-    server_response = models.BooleanField(default=False, verbose_name='ответ от сервера')
+    server_response = models.CharField(**NULLABLE, verbose_name='ответ от сервера')
     timestamp = models.DateTimeField(auto_now_add=True, verbose_name='дата и время последней попытки')
     mailing = models.ForeignKey(Mailing, on_delete=models.SET_NULL, **NULLABLE, related_name='logs',
                                 verbose_name='рассылка')
