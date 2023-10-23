@@ -9,10 +9,17 @@ class User(AbstractUser):
     username = None
 
     email = models.EmailField(unique=True, verbose_name='почта')
+    is_active = models.BooleanField(default=True, verbose_name='активен')
+    key = models.CharField(max_length=10, **NULLABLE, verbose_name='ключ')
     comment = models.TextField(**NULLABLE, verbose_name='комментарий')
-    first_name = models.CharField(max_length=50, **NULLABLE, verbose_name='имя')
-    last_name = models.CharField(max_length=50, **NULLABLE, verbose_name='фамилия')
-    middle_name = models.CharField(max_length=50, **NULLABLE, verbose_name='отчество')
+    name = models.CharField(max_length=150, **NULLABLE, verbose_name='имя')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
+
+    class Meta:
+        permissions = [
+            ("toggle_is_active", "Активировать или деактивировать пользователя"),
+        ]
+
+

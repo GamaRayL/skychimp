@@ -18,9 +18,12 @@ class StyleFormMixin:
 class MailingForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Mailing
-
-        exclude = ('status',)
-
+        fields = '__all__'
         widgets = {
             'send_time': DateInput(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['is_active'].widget.attrs['class'] = 'form-check'

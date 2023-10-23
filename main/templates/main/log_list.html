@@ -1,0 +1,28 @@
+{% extends 'main/base.html' %}
+{% block content %}
+    <h1>{{ title }}</h1>
+    <div class="d-flex flex-column">
+        <table class="table table-h1over">
+            <thead class="table-active">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Статус</th>
+                <th scope="col">Дата и время попытки</th>
+                <th scope="col">Ответ сервера</th>
+                <th scope="col">Рассылка</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                <tr>
+                    <th scope="row">{{ object.pk }}</th>
+                    <td>{{ object.status }}</td>
+                    <td>{{ object.timestamp }}</td>
+                    <td>{{ object.server_response }}</td>
+                    <td>{{ object.mailing.message.title }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

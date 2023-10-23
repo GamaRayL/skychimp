@@ -30,6 +30,7 @@ def check_mailing():
     logger.info(f'Текущая дата: {current_date}')
 
     mailings = Mailing.objects \
+        .filter(is_active=True) \
         .filter(status=MAILING_CREATED) \
         .filter(time__lte=datetime.now().time()) \
         .filter(date_run__lte=datetime.now().date())

@@ -1,4 +1,5 @@
 from django.db import models
+
 from users.models import User
 from django.conf import settings
 from constants import NULLABLE, FREQUENCY_CHOOSE, MAILING_STATUS, LOG_STATUS
@@ -20,9 +21,15 @@ class Mailing(models.Model):
     status = models.CharField(max_length=20, default='created', choices=MAILING_STATUS, verbose_name='статус')
     frequency = models.CharField(max_length=10, choices=FREQUENCY_CHOOSE, verbose_name='периодичность')
     time = models.TimeField(verbose_name='время рассылки')
+    is_active = models.BooleanField(default=True, verbose_name='активна')
     date_run = models.DateField(**NULLABLE, verbose_name='дата начала рассылки')
-    user = models.ManyToManyField(User, verbose_name='клиенты')
+    user = models.ManyToManyField(User, related_name='clients', verbose_name='клиенты')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='сообщение')
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL,
+                              **NULLABLE,
+                              related_name='owner',
+                              on_delete=models.SET_NULL,
+                              verbose_name='создатель')
 
     def __str__(self):
         return f'{self.get_frequency_display()} не позже {self.date_run} / {self.time}'
@@ -30,6 +37,10 @@ class Mailing(models.Model):
     class Meta:
         verbose_name = 'рассылка'
         verbose_name_plural = 'рассылки'
+
+        permissions = [
+            ("toggle_is_active", "Активировать или деактивировать рассылку"),
+        ]
 
 
 class Log(models.Model):

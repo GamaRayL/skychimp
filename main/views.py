@@ -1,18 +1,35 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.http import Http404
+from django.shortcuts import redirect
+from django.views.decorators.cache import cache_page
 from django.views.generic import TemplateView, CreateView, DetailView, DeleteView, UpdateView, ListView
 from django.urls import reverse_lazy, reverse
+
+from constants import MAILING_CREATED
 from main.forms import MailingForm
-from main.models import Mailing
+from main.models import Mailing, Post, Log
 from main.services import send_mailing
+from users.models import User
 
 
 class IndexView(TemplateView):
     template_name = 'main/home.html'
-    extra_context = {
-        'title': 'Главная страница'
-    }
+    cache_page(60)
+
+    def get_context_data(self, **kwargs):
+        random_blog_posts = Post.objects.order_by('?')[:3]
+        context_data = super().get_context_data(**kwargs)
+        context_data['title'] = 'Главная страница'
+        context_data['total_mailings'] = Mailing.objects.count()
+        context_data['active_mailings'] = Mailing.objects.filter(status=MAILING_CREATED).count()
+        context_data['unique_clients'] = Mailing.objects.values('user').distinct().count()
+        context_data['random_blog_posts'] = random_blog_posts
+
+        return context_data
 
 
-class MailingListView(ListView):
+class MailingListView(LoginRequiredMixin, ListView):
     model = Mailing
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -22,13 +39,17 @@ class MailingListView(ListView):
         return context_data
 
 
-class MailingCreateView(CreateView):
+class MailingCreateView(LoginRequiredMixin, CreateView):
     model = Mailing
     form_class = MailingForm
     success_url = reverse_lazy('main:mailings')
 
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
 
-class MailingUpdateView(UpdateView):
+
+class MailingUpdateView(LoginRequiredMixin, UpdateView):
     model = Mailing
     form_class = MailingForm
 
@@ -36,7 +57,7 @@ class MailingUpdateView(UpdateView):
         return reverse('main:mailing', args=[self.object.pk])
 
 
-class MailingDetailView(DetailView):
+class MailingDetailView(LoginRequiredMixin, DetailView):
     model = Mailing
 
     def get_context_data(self, **kwargs):
@@ -45,9 +66,31 @@ class MailingDetailView(DetailView):
         context_data['title'] = 'Текущая рассылка'
         context_data['users_list'] = users_list
 
+        if self.object.owner == self.request.user:
+            context_data['true_user'] = True
+
         return context_data
 
 
-class MailingDeleteView(DeleteView):
+class MailingDeleteView(LoginRequiredMixin, DeleteView):
     model = Mailing
     success_url = reverse_lazy('main:mailings')
+
+
+class LogListView(ListView):
+    model = Log
+    extra_context = {
+        'title': 'Логи рассылок'
+    }
+
+
+@login_required
+def toggle_mailing_activation(request, pk):
+    mailing = Mailing.objects.get(pk=pk)
+    if mailing.is_active:
+        mailing.is_active = False
+    else:
+        mailing.is_active = True
+
+    mailing.save()
+    return redirect(reverse('main:mailings'))

@@ -4,12 +4,11 @@
         <div class="col">
             <div class="card card-hover card-active mb-4 rounded-3 border-success">
               <div class="card-header py-3 text-bg-success border-success">
-                <h4 class="my-0 fw-normal">Количество просмотров</h4>
+                <h4 class="my-0 fw-normal">Количество рассылок всего</h4>
               </div>
               <div class="card-body text-bg-light rounded-3">
-                <h1 class="card-title">50</h1>
+                <h1 class="card-title">{{ total_mailings }}</h1>
               </div>
-              <a href="#1" class="stretched-link"></a>
             </div>
         </div>
 
@@ -19,9 +18,8 @@
                 <h4 class="my-0 fw-normal">Количество активных рассылок</h4>
               </div>
               <div class="card-body text-bg-light rounded-3">
-                <h1 class="card-title">24</h1>
+                <h1 class="card-title">{{ active_mailings }}</h1>
               </div>
-              <a href="#1" class="stretched-link"></a>
             </div>
           </div>
 
@@ -31,22 +29,33 @@
                 <h4 class="my-0 fw-normal">Количество уникальных клиентов для рассылок</h4>
               </div>
               <div class="card-body text-bg-light rounded-3">
-                <h1 class="card-title">1150</h1>
-              </div>
-              <a href="#1" class="stretched-link"></a>
-            </div>
-          </div>
-
-        <div class="col-12">
-            <div class="card mb-4 rounded-3 border-success">
-              <div class="card-header py-3 text-bg-success border-success">
-                <h4 class="my-0 fw-normal">Случайные статьи</h4>
-              </div>
-              <div class="card-body text-bg-light rounded-3">
-                <h1 class="card-title">50</h1>
+                <h1 class="card-title">{{ unique_clients }}</h1>
               </div>
             </div>
           </div>
 
+                <div class="col-12">
+                    <div class="card mb-4 rounded-3">
+                      <div class="card-header py-3 text-bg-success border-success">
+                        <h4 class="my-0 fw-normal">Случайные статьи</h4>
+                      </div>
+                      <div class="card-body row col-12 text-bg-light rounded-3">
+                        {% for post in random_blog_posts %}
+                            <div class="col-4">
+                                <div class="card card-hover card-active mb-4 rounded-3">
+                                  <div class="card-header py-3 text-bg-secondary rounded-top-3">
+                                    <h4 class="my-0 fw-normal">{{ post.title|slice:':10' }}</h4>
+                                  </div>
+                                  <div class="card-body text-bg-light rounded-3">
+                                    <h1 class="card-text fs-6 text-light-emphasis">
+                                        {{ post.description|truncatewords:4 }}
+                                    </h1>
+                                  </div>
+                                </div>
+                              </div>
+                          {% endfor %}
+                      </div>
+                    </div>
+        </div>
     </div>
 {% endblock %}

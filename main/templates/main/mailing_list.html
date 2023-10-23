@@ -2,10 +2,12 @@
 {% block content %}
     <h1>{{ title }}</h1>
     <div class="d-flex flex-column">
-        <table class="table table-hover">
+        <table class="table table-h1over">
             <thead class="table-active">
             <tr>
                 <th scope="col">#</th>
+                <th scope="col">Создатель</th>
+                <th scope="col">Активна</th>
                 <th scope="col">Время рассылки</th>
                 <th scope="col">Периодичность</th>
                 <th scope="col">Сообщение</th>
@@ -16,6 +18,8 @@
             {% for object in object_list %}
                 <tr onclick="window.location='{% url 'main:mailing' object.pk %}';">
                     <th scope="row">{{ object.pk }}</th>
+                    <td>{{ object.owner }}</td>
+                    <td>{{ object.is_active }}</td>
                     <td>{{ object.time }}</td>
                     <td>{{ object.get_frequency_display }}</td>
                     <td>{{ object.message }}</td>
@@ -26,8 +30,11 @@
             {% endfor %}
             </tbody>
         </table>
-        <a class="align-self-end btn btn-primary" href="{% url 'main:mailing_create' %}" role="button">
-            Добавить
-        </a>
+        {% if user.is_superuser %}
+            <a class="align-self-end btn btn-primary" href="{% url 'main:mailing_create' %}" role="button">
+                Добавить
+            </a>
+        {% endif %}
+
     </div>
 {% endblock %}

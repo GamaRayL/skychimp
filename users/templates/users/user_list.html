@@ -1,0 +1,43 @@
+{% extends 'main/base.html' %}
+{% block content %}
+    <h1>{{ title }}</h1>
+    <div class="d-flex flex-column">
+        <table class="table table-hover">
+            <thead class="table-active">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Почта</th>
+                <th scope="col">Имя</th>
+                <th scope="col">Доступ</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                <tr onclick="window.location='{% url 'users:user_detail' object.pk %}';">
+                    <th scope="row">{{ object.pk }}</th>
+                    <td>{{ object.email }}</td>
+                    <td>
+                        {% if object.name %}
+                            {{ object.name }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+
+                    {% if object.is_active %}
+                        <td class="{% if object.is_active %}bg-success-subtle{% endif %}">
+                            Активирован
+                        </td>
+                    {% else %}
+                        <td>Деактивирован</td>
+                    {% endif %}
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+{#        <a class="align-self-end btn btn-primary" href="{% url 'main:mailing_create' %}" role="button">#}
+{#            Добавить#}
+{#        </a>#}
+    </div>
+{% endblock %}

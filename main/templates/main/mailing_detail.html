@@ -1,8 +1,13 @@
 {% extends 'main/base.html' %}
 {% block content %}
     <div class="card w-50">
-        <div class="card-header py-3 {% include 'includes/status_statement.html' %}">
-            <h1 class="my-0 fw-normal display-6">Текущая рассылка</h1>
+        <div class="card-header py-3 d-flex align-items-baseline justify-content-between {% include 'includes/status_statement.html' %}">
+            <h1 class="my-0 fw-normal display-6">{{ title }}</h1>
+            <div>
+                <p class="text-nowrap font-monospace text-secondary m-0">
+                        от {{ object.owner }}
+                </p>
+            </div>
         </div>
         <div class="card-body text-bg-light rounded-3">
             <div class="mb-4">
@@ -12,7 +17,16 @@
                             <h5 class="my-0">Время</h5>
                         </div>
                         <span class="text-body-emphasis text-nowrap font-monospace">
-                            {{ object.send_time }}
+                            {{ object.time }}
+                        </span>
+                    </li>
+
+                    <li class="d-flex justify-content-between lh-sm p-2">
+                        <div class="w-100 border-bottom pb-2">
+                            <h5 class="my-0">Дата</h5>
+                        </div>
+                        <span class="text-body-emphasis text-nowrap font-monospace">
+                            {{ object.date_run }}
                         </span>
                     </li>
 
@@ -57,15 +71,26 @@
             </div>
         </div>
         <div class="card-footer">
-            <div class="float-end d-flex gap-2">
-                <a class="btn btn-outline-dark" href="{% url 'main:mailing_update' object.pk %}">
-                    Изменить
+            {% if perms.main.toggle_is_active %}
+                <a class="btn btn-outline-dark" href="{% url 'main:toggle_mailing_activation' object.pk %}">
+                   {% if mailing.is_active %}
+                        Деактивировать
+                   {% else %}
+                        Активировать
+                   {% endif %}
                 </a>
+            {% endif %}
 
-                <a class="btn btn-danger" href="{% url 'main:mailing_delete' object.pk %}">
-                    Удалить
-                </a>
-           </div>
+            {% if perms.user.is_superuser or true_user %}
+                <div class="float-end d-flex gap-2">
+                    <a class="btn btn-outline-dark" href="{% url 'main:mailing_update' object.pk %}">
+                        Изменить
+                    </a>
+                    <a class="btn btn-danger" href="{% url 'main:mailing_delete' object.pk %}">
+                        Удалить
+                    </a>
+               </div>
+           {% endif %}
         </div>
     </div>
 {% endblock %}
