@@ -75,6 +75,9 @@ class MailingDetailView(LoginRequiredMixin, DetailView):
 class MailingDeleteView(LoginRequiredMixin, DeleteView):
     model = Mailing
     success_url = reverse_lazy('main:mailings')
+    extra_context = {
+        'title': 'Удаление рассылки'
+    }
 
 
 class LogListView(ListView):

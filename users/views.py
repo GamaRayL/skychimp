@@ -95,6 +95,9 @@ class ProfileView(LoginRequiredMixin, UpdateView):
 class UserDeleteView(LoginRequiredMixin, DeleteView):
     model = User
     success_url = reverse_lazy('users:user_list')
+    extra_context = {
+        'title': 'Удаление пользователя'
+    }
 
 
 @login_required
