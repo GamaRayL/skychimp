@@ -48,6 +48,9 @@ class MailingCreateView(LoginRequiredMixin, CreateView):
 class MailingUpdateView(LoginRequiredMixin, UpdateView):
     model = Mailing
     form_class = MailingForm
+    extra_context = {
+        'title': 'Редактирование рассылки'
+    }
 
     def get_success_url(self):
         return reverse('main:mailing', args=[self.object.pk])
