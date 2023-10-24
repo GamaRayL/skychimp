@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django import forms
 
 from main.models import Mailing
@@ -18,9 +20,14 @@ class StyleFormMixin:
 class MailingForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Mailing
-        fields = '__all__'
+        exclude = ('owner',)
         widgets = {
-            'send_time': DateInput(),
+            'date_run': forms.DateInput(
+                format='%Y-%m-%d',
+                attrs={'class': 'form-control',
+                       'type': 'date'
+                       }),
+            'time': forms.TimeInput(format='%H:%M', attrs={'type': 'time'}),
         }
 
     def __init__(self, *args, **kwargs):

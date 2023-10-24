@@ -7,7 +7,7 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Создатель</th>
-                <th scope="col">Активна</th>
+                <th scope="col">Активирована / Деактивирована</th>
                 <th scope="col">Время рассылки</th>
                 <th scope="col">Периодичность</th>
                 <th scope="col">Сообщение</th>
@@ -19,7 +19,13 @@
                 <tr onclick="window.location='{% url 'main:mailing' object.pk %}';">
                     <th scope="row">{{ object.pk }}</th>
                     <td>{{ object.owner }}</td>
-                    <td>{{ object.is_active }}</td>
+                    <td>
+                      {% if object.is_active %}
+                        Активирована
+                      {% else %}
+                        Деактивирована
+                      {% endif %}
+                    </td>
                     <td>{{ object.time }}</td>
                     <td>{{ object.get_frequency_display }}</td>
                     <td>{{ object.message }}</td>

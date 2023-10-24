@@ -21,10 +21,10 @@ class Mailing(models.Model):
     status = models.CharField(max_length=20, default='created', choices=MAILING_STATUS, verbose_name='статус')
     frequency = models.CharField(max_length=10, choices=FREQUENCY_CHOOSE, verbose_name='периодичность')
     time = models.TimeField(verbose_name='время рассылки')
-    is_active = models.BooleanField(default=True, verbose_name='активна')
     date_run = models.DateField(**NULLABLE, verbose_name='дата начала рассылки')
-    user = models.ManyToManyField(User, related_name='clients', verbose_name='клиенты')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='сообщение')
+    user = models.ManyToManyField(User, related_name='clients', verbose_name='клиенты')
+    is_active = models.BooleanField(default=True, verbose_name='активна')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               **NULLABLE,
                               related_name='owner',
