@@ -1,16 +1,12 @@
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.http import Http404
-from django.shortcuts import redirect
-from django.views.decorators.cache import cache_page
-from django.views.generic import TemplateView, CreateView, DetailView, DeleteView, UpdateView, ListView
-from django.urls import reverse_lazy, reverse
-
-from constants import MAILING_CREATED
 from main.forms import MailingForm
+from django.shortcuts import redirect
+from constants import MAILING_CREATED
 from main.models import Mailing, Post, Log
-from main.services import send_mailing
-from users.models import User
+from django.urls import reverse_lazy, reverse
+from django.views.decorators.cache import cache_page
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.views.generic import TemplateView, CreateView, DetailView, DeleteView, UpdateView, ListView
 
 
 class IndexView(TemplateView):

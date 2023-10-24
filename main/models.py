@@ -1,5 +1,4 @@
 from django.db import models
-
 from users.models import User
 from django.conf import settings
 from constants import NULLABLE, FREQUENCY_CHOOSE, MAILING_STATUS, LOG_STATUS

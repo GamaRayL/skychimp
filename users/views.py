@@ -1,18 +1,16 @@
 import random
-
-from django.conf import settings
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib.auth.views import LoginView as BaseLoginView
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import send_mail
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
-
-from users.forms import LoginForm, RegisterForm, ProfileForm, UpdateForm
 from users.models import User
+from django.conf import settings
+from django.http import HttpResponse
+from django.shortcuts import redirect
+from django.core.mail import send_mail
+from django.urls import reverse_lazy, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.views import LoginView as BaseLoginView
+from users.forms import LoginForm, RegisterForm, ProfileForm, UpdateForm
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
 
 class LoginView(BaseLoginView):

@@ -1,7 +1,4 @@
-from datetime import datetime
-
 from django import forms
-
 from main.models import Mailing
 
 

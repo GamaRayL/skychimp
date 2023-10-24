@@ -1,7 +1,6 @@
-from django.contrib.auth.views import LogoutView
 from django.urls import path
-
 from users.apps import UsersConfig
+from django.contrib.auth.views import LogoutView
 from users.views import LoginView, RegisterView, verify_email, UserListView, UserDetailView, ProfileView, \
     UserUpdateView, toggle_user_activation, UserDeleteView
 

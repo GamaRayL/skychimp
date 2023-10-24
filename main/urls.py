@@ -1,7 +1,6 @@
 from django.urls import path
-from django.views.decorators.cache import cache_page
-
 from main.apps import MainConfig
+from django.views.decorators.cache import cache_page
 from main.views import IndexView, MailingListView, MailingCreateView, MailingUpdateView, MailingDetailView, \
     MailingDeleteView, toggle_mailing_activation, LogListView
 

@@ -1,6 +1,5 @@
 from django.db import models
 from constants import NULLABLE
-
 from django.contrib.auth.models import AbstractUser
 
 

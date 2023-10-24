@@ -1,13 +1,11 @@
 import logging
+from pprint import pformat
+from config import settings
+from main.models import Mailing, Log
+from django.core.mail import send_mail
 from datetime import datetime, timedelta
 from logging.handlers import RotatingFileHandler
-from pprint import pprint, pformat
-
-from django.core.mail import send_mail
-
-from config import settings
 from constants import MAILING_CREATED, MAILING_STARTED, LOG_SUCCESS, LOG_FAILURE, DAILY, WEEKLY, MONTHLY
-from main.models import Mailing, Log
 
 logger = logging.getLogger('my_logger')
 logger.setLevel(logging.INFO)
