@@ -1,5 +1,5 @@
 from django.contrib import admin
-from main.models import Mailing, Message, Post, Log
+from main.models import Mailing, Message, Log
 
 
 @admin.register(Mailing)
@@ -15,8 +15,3 @@ class MessageAdmin(admin.ModelAdmin):
 @admin.register(Log)
 class LogAdmin(admin.ModelAdmin):
     list_display = ('status', 'mailing', 'timestamp', 'server_response')
-
-
-@admin.register(Post)
-class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'description', 'image', 'views', 'publish_date', 'user',)

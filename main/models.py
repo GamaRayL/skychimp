@@ -55,20 +55,3 @@ class Log(models.Model):
     class Meta:
         verbose_name = 'лог'
         verbose_name_plural = 'логи'
-
-
-class Post(models.Model):
-    title = models.CharField(max_length=150, verbose_name='заголовок')
-    description = models.TextField(verbose_name='содержимое')
-    image = models.ImageField(upload_to='posts/', **NULLABLE, verbose_name='изображение')
-    views = models.IntegerField(default=0, verbose_name='просмотры')
-    publish_date = models.DateTimeField(auto_now_add=True, verbose_name='дата публикации')
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, **NULLABLE,
-                             verbose_name='пользователь')
-
-    def __str__(self):
-        return self.title
-
-    class Meta:
-        verbose_name = 'пост'
-        verbose_name_plural = 'посты'

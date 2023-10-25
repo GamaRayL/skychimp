@@ -1,7 +1,8 @@
+from blog.models import Post
 from main.forms import MailingForm
 from django.shortcuts import redirect
 from constants import MAILING_CREATED
-from main.models import Mailing, Post, Log
+from main.models import Mailing, Log
 from django.urls import reverse_lazy, reverse
 from django.views.decorators.cache import cache_page
 from django.contrib.auth.mixins import LoginRequiredMixin

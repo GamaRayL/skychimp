@@ -13,7 +13,7 @@ class Post(models.Model):
     views = models.IntegerField(default=0, verbose_name='количество просмотров')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,
                               **NULLABLE,
-                              related_name='owner',
+                              related_name='posts',
                               on_delete=models.SET_NULL,
                               verbose_name='создатель')
 
